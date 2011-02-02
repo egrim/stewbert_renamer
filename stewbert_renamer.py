@@ -33,6 +33,9 @@ TORRENT_DIRECTORY_TO_SEARCH = '/srv/Torrents'
 
 SIMULATE = False
 """If set to "True" the script will only print proposed file renames"""
+
+LINK_NOT_RENAME = True
+"""If set to "True" the script will create a link instead of renaming"""
 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 SCRIPT_VERSION = "1.0"
@@ -188,7 +191,12 @@ def lookup_and_rename(filename):
             print "%s -> %s" % (os.path.join(dirpath, filename),
                                 os.path.join(dirpath, new_file_name))
         else:
-            os.rename(os.path.join(dirpath, filename), 
+            if LINK_NOT_RENAME:
+                operation = os.link
+            else:
+                operation = os.rename
+                
+            operation(os.path.join(dirpath, filename), 
                       os.path.join(dirpath, new_file_name))
 
 
